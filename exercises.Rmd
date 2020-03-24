@@ -48,7 +48,7 @@ packages <- c(
   'remotes'
 )
 # Uncomment the next lines (remove the first #) to install the packages
-# install.packages(packages)
+install.packages(packages)
 # remotes::install_github("hrbrmstr/hrbrthemes")
 # Load standard packages
 library(ggplot2)
@@ -115,7 +115,7 @@ See `?geom_point` for more information on the point layer.
 
 ```{r}
 ggplot(faithful) + 
-  geom_point(aes(x = eruptions, y = waiting))
+  geom_point(aes(x = eruptions, y = waiting), shape = 'square', alpha = 0.4)
 ```
 
 Hint 1: transparency is controlled with `alpha`, and shape with `shape`
@@ -127,7 +127,7 @@ Colour the two distributions in the histogram with different colours
 
 ```{r}
 ggplot(faithful) + 
-  geom_histogram(aes(x = eruptions))
+  geom_histogram(aes(x = eruptions, fill = eruptions < 3.1))
 ```
 
 Hint 1: For polygons you can map two different colour-like aesthetics: `colour` 
@@ -140,7 +140,7 @@ Colour the distributions in the histogram by whether `waiting` is above or below
 
 ```{r}
 ggplot(faithful) + 
-  geom_histogram(aes(x = eruptions))
+  geom_histogram(aes(x = eruptions, fill = waiting < 60), position = 'dodge', alpha = 0.5)
 ```
 
 Change the plot above by setting `position = 'dodge'` in `geom_histogram()` 
@@ -153,7 +153,8 @@ how to draw straight lines from a slope and intercept.
 
 ```{r}
 ggplot(faithful) + 
-  geom_point(aes(x = eruptions, y = waiting))
+  geom_point(aes(x = eruptions, y = waiting)) + 
+  geom_abline(slope = -40 , intercept = 195)
 ```
 
 ### Stat
@@ -220,7 +221,7 @@ stat it uses as default. Then modify the code to use the stat directly instead
 
 ```{r}
 ggplot(mpg) + 
-  geom_bar(aes(x = class))
+  stat_count(aes(x = class))
 ```
 
 * * *
@@ -229,7 +230,9 @@ Use `stat_summary()` to add a red dot at the mean `hwy` for each group
 
 ```{r}
 ggplot(mpg) + 
-  geom_jitter(aes(x = class, y = hwy), width = 0.2)
+  geom_jitter(aes(x = class, y = hwy), width = 0.2) +
+  stat_summary(aes(x = class, y = hwy), fun = mean, geom = 'point', colour = 'red', size = 2, alpha = 0.5) + 
+  stat_summary(aes(x = class, y = hwy), fun = median, geom = 'point', colour = 'blue', size = 2, alpha = 0.5)
 ```
 
 Hint: You will need to change the default geom of `stat_summary()`
@@ -268,7 +271,7 @@ Color Brewer and pick your favourite. Modify the code below to use it
 ```{r}
 ggplot(mpg) + 
   geom_point(aes(x = displ, y = hwy, colour = class)) + 
-  scale_colour_brewer(type = 'qual')
+  scale_colour_brewer(palette = 'Spectral')
 ```
 
 * * *
@@ -297,7 +300,7 @@ variable, but to the continuous `cty` variable. What happens to the guide?
 
 ```{r}
 ggplot(mpg) + 
-  geom_point(aes(x = displ, y = hwy, colour = class, size = cty))
+  geom_point(aes(x = displ, y = hwy, colour = cty, size = cty))
 ```
 
 * * *
@@ -310,7 +313,8 @@ guide type?
 
 ```{r}
 ggplot(mpg) + 
-  geom_point(aes(x = displ, y = hwy, colour = cty, size = cty))
+  geom_point(aes(x = displ, y = hwy, colour = cty, size = cty)) + 
+  guides(colour = 'legend')
 ```
 
 ### Facets
