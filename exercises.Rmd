@@ -343,7 +343,7 @@ settings in the plot below:
 ```{r}
 ggplot(mpg) + 
   geom_point(aes(x = displ, y = hwy)) + 
-  facet_wrap(~ drv)
+  facet_wrap(~ drv, scales = 'free')
 ```
 
 * * *
@@ -355,7 +355,7 @@ between the panels in the plot. What happens?
 ```{r}
 ggplot(mpg) + 
   geom_bar(aes(y = manufacturer)) + 
-  facet_grid(class ~ .)
+  facet_grid(class ~ ., space = 'free_y', scales = 'free_y')
 ```
 
 Use the `space` argument in `facet_grid()` to change the plot above so each bar 
@@ -369,7 +369,7 @@ recreate the same panels present in the plot below by using `facet_wrap()`
 ```{r}
 ggplot(mpg) + 
   geom_point(aes(x = displ, y = hwy)) + 
-  facet_grid(year ~ drv)
+  facet_wrap(~ drv + year)
 ```
 
 ### Coordinates
@@ -414,7 +414,8 @@ and then using `coord_trans()`. Compare the results — how do they differ?
 
 ```{r}
 ggplot(mpg) + 
-  geom_point(aes(x = hwy, y = displ))
+  geom_point(aes(x = hwy, y = displ)) + 
+  coord_trans(y= 'log10')
 ```
 
 * * *
@@ -434,7 +435,7 @@ world <- sf::st_wrap_dateline(world,
 # Plot code
 ggplot(world) + 
   geom_sf() + 
-  coord_sf(crs = "+proj=moll")
+  coord_sf(crs = "+proj=robin")
 ```
 
 Maps are a huge area in data visualisation and simply too big to cover in this 
@@ -492,6 +493,9 @@ ggplot(mpg) +
        caption = "source: http://fueleconomy.gov",
        x = 'Number of cars',
        y = NULL)
+  theme(
+    
+  )
 ```
 
 ## Extensions
